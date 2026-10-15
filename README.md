@@ -1,3 +1,14 @@
-# My Daily V6
+# Personal Secretary V7
 
-將此資料夾中的 index.html、sw.js、manifest.webmanifest、icon.svg 放在 GitHub Pages 網站根目錄。更新前先匯出 JSON 備份。原 IndexedDB 名稱不變。
+以使用者提供的 index(8).html 為基礎更新。
+
+## 更新
+- 全面改名 Personal Secretary（包含主畫面、iOS 標題、manifest、備份 metadata）。
+- 「更多」新增「生活紀錄」入口，可使用原有日誌、年/月/日按鈕篩選、編輯與刪除。
+- 訂閱每期採含起始日的計算方式：2026-10-15 每月訂閱，本期到期 2026-11-14，顯示下次扣款日 2026-11-14。終止日期為選填，空白代表持續續訂。
+- IndexedDB 名稱沿用 daily-life-db，以保留原有資料。
+
+## 部署
+將本資料夾所有檔案放在 GitHub Pages 網站根目錄。更新前請匯出 JSON 備份。
+
+注意：本版本依需求顯示「到期當日扣款」；實際平台可能於次日續訂扣款，請以各服務商帳單為準。

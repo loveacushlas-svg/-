@@ -1,8 +1,8 @@
 {
   "id": "./",
-  "name": "My Daily｜個人生活管理",
-  "short_name": "My Daily",
-  "description": "待辦、習慣、生活日誌、旅遊裝備與汽車保養紀錄",
+  "name": "Personal Secretary｜個人生活管理",
+  "short_name": "Personal Secretary",
+  "description": "待辦、習慣、訂閱、生活紀錄、旅遊裝備與汽車保養",
   "lang": "zh-Hant",
   "start_url": "./",
   "scope": "./",
