@@ -1,3 +1,5 @@
-# Personal Secretary V11
+Personal Secretary V12
 
-將檔案全部放置 GitHub Pages 同一目錄。維持 IndexedDB daily-life-db / records / appdata 不變。更新前請匯出 JSON 備份。飲食照片會壓縮為 JPEG 並儲存於 IndexedDB，備份檔亦包含照片，可能較大。提醒僅在 App 開啟時檢查。
+更新：指定日可勾選星期一至星期日；旅遊裝備改為標題分類與裝備清單兩區塊，自動編號。
+
+保留 IndexedDB daily-life-db / version 1 / records / appdata。部署前先匯出 JSON 備份。
