@@ -1,3 +1,5 @@
-# Personal Secretary V9
+Personal Secretary V10
 
-將所有檔案部署至原 GitHub Pages 網址。資料沿用 IndexedDB daily-life-db，更新前請匯出 JSON 備份。深淺模式儲存於 localStorage。訂閱提醒僅在 App 開啟時檢查，不是背景推播。
+修改：淡橘色主題（深淺模式）、訂閱本期終止日依起始日期及扣款週期自動計算、保留獨立的實際取消日期。
+
+保留 IndexedDB daily-life-db / records / appdata。請先匯出備份，再將全部檔案部署至 GitHub Pages。提醒僅在 App 開啟時檢查。
