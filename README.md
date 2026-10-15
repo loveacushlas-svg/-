@@ -1,11 +1,3 @@
-# Personal Secretary V8
+# Personal Secretary V9
 
-以使用者上傳的 index(10).html 為基礎。
-
-- 生活紀錄：依序顯示行事曆、日誌紀錄、本日記事（其後保留過往日誌）。本日記事呈現今日既有日誌，並可快速跳至編輯。
-- 訂閱管理：橫向滑動的泡泡卡片，點擊進入獨立詳情畫面，包含訂閱期間、扣款日期、備註及編輯／刪除。
-- 未修改其他模組的功能邏輯。
-- 保留 IndexedDB `daily-life-db`，維持既有資料相容性。
-
-## 部署
-將全部檔案上傳至同一 GitHub Pages 目錄。更新前請先匯出 JSON 備份。iPhone 主畫面若顯示舊版，請重新開啟或更新捷徑。
+將所有檔案部署至原 GitHub Pages 網址。資料沿用 IndexedDB daily-life-db，更新前請匯出 JSON 備份。深淺模式儲存於 localStorage。訂閱提醒僅在 App 開啟時檢查，不是背景推播。
