@@ -1,3 +1,5 @@
-Personal Secretary V34
+Personal Secretary V35
 
-以使用者最新上傳的 V33 index.html 為基礎。手機版汽車紀錄表單的日期欄位改為整行寬度，避免 iOS Safari 原生日期輸入框與里程欄位重疊；保留其他雙欄配置、提醒勾選樣式與既有資料庫結構。
+汽車保養與支出：手機版維持每行雙欄，日期與里程同列。縮小日期欄位字體與內距，約束 Safari 原生日期控制項寬度，避免重疊。
+
+IndexedDB daily-life-db / records / appdata 不變，保留既有資料。
