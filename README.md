@@ -1,3 +1,3 @@
-Personal Secretary V31
+Personal Secretary V33
 
-調整汽車新增與編輯紀錄的欄位順序：記錄日期與本次里程同列；下次保養日期與下次保養里程同列。維持手機版雙欄排列，既有 IndexedDB 資料結構不變。
+以使用者上傳的 V32 index.html 為基礎。調整所有提醒核取方塊，使提示文字緊鄰方塊（訂閱、習慣、汽車）。保留 IndexedDB 資料結構與原有功能。
