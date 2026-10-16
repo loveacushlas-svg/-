@@ -1,3 +1,5 @@
-Personal Secretary V36
+Personal Secretary V39
 
-新增首頁右上角「設定」頁面，八項服務可個別顯示／隱藏。設定儲存於 localStorage，既有 IndexedDB 資料不刪除；匯出備份包含服務顯示設定，匯入舊備份仍相容。
+以 2026-10-16 最新上傳的 V38 index.html 為基礎。
+飲食紀錄：將備註改名為必填的「飲食標籤」；本日每筆資料顯示餐點名稱、飲食標籤、價錢，不顯示時間。
+保留原 IndexedDB daily-life-db / records / appdata 及所有其他功能。
