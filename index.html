@@ -69,11 +69,15 @@
     #modal .car-form-grid .field{min-width:0;gap:7px}
     #modal .car-form-grid input,#modal .car-form-grid select{width:100%;min-width:0;max-width:100%;padding:11px 9px;font-size:16px}
     #modal .car-form-grid .field.full{grid-column:1/-1}
-    /* V29: iOS Safari 日期選擇器有原生最小寬度，窄螢幕改為整行以避免兩欄互相覆蓋 */
+    /* V30: 保持日期雙欄；限制 iOS Safari 日期控制項的內部最小寬度 */
     @media(max-width:520px){
-      #modal .car-form-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
-      #modal .car-form-grid .field.full,#modal .car-form-grid .field:has(> input[type="date"]){grid-column:1/-1}
-      #modal .car-form-grid input[type="date"]{display:block;width:100%;min-width:0;max-width:100%;font-size:16px}
+      #modal .car-form-grid{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:8px}
+      #modal .car-form-grid .field:has(> input[type="date"]){grid-column:auto;min-width:0;overflow:hidden}
+      #modal .car-form-grid input[type="date"]{display:block;box-sizing:border-box;width:100%;min-width:0;max-width:100%;font-size:12px;line-height:20px;padding:9px 2px;letter-spacing:-.3px;overflow:hidden;-webkit-appearance:none;appearance:none}
+      #modal .car-form-grid input[type="date"]::-webkit-date-and-time-value{min-width:0;width:100%;text-align:left}
+      #modal .car-form-grid input[type="date"]::-webkit-datetime-edit{min-width:0;padding:0;white-space:nowrap}
+      #modal .car-form-grid input[type="date"]::-webkit-calendar-picker-indicator{margin:0;padding:0;width:13px;flex-shrink:0}
+      #modal .car-form-grid .field:has(> input[type="date"]) label{font-size:11px;letter-spacing:-.15px}
     }
     .car-jump{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:13px}
     .car-jump .field{min-width:0}.car-jump select,.car-jump input{padding:9px 5px;font-size:14px}
@@ -249,7 +253,7 @@
     $('#modalForm .formgrid')?.classList.add('car-form-grid');
   }
 
-  function exportData(){const payload={app:'Personal Secretary',version:29,exportedAt:new Date().toISOString(),data};const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=`personal-secretary-backup-${today()}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
+  function exportData(){const payload={app:'Personal Secretary',version:30,exportedAt:new Date().toISOString(),data};const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=`personal-secretary-backup-${today()}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
   async function importData(file){if(!file)return;try{const obj=JSON.parse(await file.text());const incoming=obj.data||obj;if(!incoming||!Array.isArray(incoming.todos)||!Array.isArray(incoming.habits))throw new Error('備份格式不符');if(!confirm('匯入會取代目前所有資料。建議先匯出目前資料。確定繼續？'))return;data={todos:incoming.todos||[],habits:incoming.habits||[],habitLogs:incoming.habitLogs||[],journals:incoming.journals||[],trips:incoming.trips||[],car:incoming.car||[],subscriptions:incoming.subscriptions||[],foods:incoming.foods||[],foodNoteTags:Array.isArray(incoming.foodNoteTags)?incoming.foodNoteTags:["蔬菜","水果","油炸","水煮","肉類","乳製品"]};await save();render();alert('匯入完成。');}catch(e){alert('無法匯入：檔案格式錯誤或內容不完整。');}}
   async function action(el){const a=el.dataset.action,id=el.dataset.id;
     if(a==='page-back'){currentTab=previousTabs.pop()||(currentTab==='foodDayDetail'?'foods':currentTab==='subscriptionDetail'?'subscriptions':'home');render();window.scrollTo(0,0);return;}if(a==='car-history-year'){carHistoryYear=el.dataset.year;carHistoryMonth='';render();return;}
