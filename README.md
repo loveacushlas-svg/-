@@ -1,5 +1,5 @@
-Personal Secretary V22
+Personal Secretary V23
 
-飲食紀錄每個日期泡泡框僅顯示日期、筆數、金額。點擊進入獨立的當日飲食詳情頁面，可查看餐別、餐點、時間、價格、備註、照片，並編輯、刪除或新增。按返回回到原本每週飲食頁面。
+以使用者上傳之 2026-10-16 HTML 為基礎。更新習慣進度 1% 與整數單位、移除行事曆提示、汽車週曆與週明細、ETC 類型、各功能返回上一頁。
 
-保留 IndexedDB daily-life-db v1 / records / appdata，不會重設本機資料。
+保留 IndexedDB daily-life-db / records / appdata。
