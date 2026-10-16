@@ -1,5 +1,3 @@
-Personal Secretary V35
+Personal Secretary V36
 
-汽車保養與支出：手機版維持每行雙欄，日期與里程同列。縮小日期欄位字體與內距，約束 Safari 原生日期控制項寬度，避免重疊。
-
-IndexedDB daily-life-db / records / appdata 不變，保留既有資料。
+新增首頁右上角「設定」頁面，八項服務可個別顯示／隱藏。設定儲存於 localStorage，既有 IndexedDB 資料不刪除；匯出備份包含服務顯示設定，匯入舊備份仍相容。
