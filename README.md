@@ -1,5 +1,8 @@
-Personal Secretary V42
+Personal Secretary V43
 
-首頁快速入口依啟用狀態自動補足最多三項服務，第四格固定為「更多」。當啟用服務少於三項時，只顯示可用服務與「更多」，不會顯示已隱藏的服務。
+依照最新上傳的 V42 index.html 更新。
 
-維持 IndexedDB daily-life-db / records / appdata，不刪除現有紀錄。
+移除「更多功能」頁面中的三段提示：本機備份提示、匯入覆蓋提示、通知與推播說明。
+保留匯出 JSON 備份、匯入備份、測試前景通知權限及通知狀態。
+
+資料庫識別碼 daily-life-db、版本 1、records / appdata 不變。
