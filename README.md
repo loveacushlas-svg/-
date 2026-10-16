@@ -1,5 +1,5 @@
-Personal Secretary V41
+Personal Secretary V42
 
-首頁日期保持單行，設定與深淺色按鈕調整間距及大小；飲食紀錄本週統計預設顯示「飲食標籤」。
+首頁快速入口依啟用狀態自動補足最多三項服務，第四格固定為「更多」。當啟用服務少於三項時，只顯示可用服務與「更多」，不會顯示已隱藏的服務。
 
-保留 IndexedDB daily-life-db / records / appdata，不清除既有資料。
+維持 IndexedDB daily-life-db / records / appdata，不刪除現有紀錄。
