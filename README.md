@@ -1,5 +1,5 @@
-Personal Secretary V23
+Personal Secretary V27
 
-以使用者上傳之 2026-10-16 HTML 為基礎。更新習慣進度 1% 與整數單位、移除行事曆提示、汽車週曆與週明細、ETC 類型、各功能返回上一頁。
+本版調整旅遊與裝備：主分類各自佔一整行，主分類下的子分類（裝備項目）採雙欄排列，每行最多兩項，第三項自動換行。其餘功能延續 V26。
 
-保留 IndexedDB daily-life-db / records / appdata。
+部署：將五個檔案上傳至 GitHub Pages 原專案。資料維持原 IndexedDB daily-life-db / records / appdata。更新前請匯出備份。
