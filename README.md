@@ -1,8 +1,5 @@
-Personal Secretary V43
+Personal Secretary V44
 
-依照最新上傳的 V42 index.html 更新。
+依據 2026-10-19 上傳的 index.html 修改。所有新增紀錄的數字輸入欄位預設留白，不再顯示 0；編輯既有紀錄仍顯示原始數值。保留既有 IndexedDB 資料庫設定。
 
-移除「更多功能」頁面中的三段提示：本機備份提示、匯入覆蓋提示、通知與推播說明。
-保留匯出 JSON 備份、匯入備份、測試前景通知權限及通知狀態。
-
-資料庫識別碼 daily-life-db、版本 1、records / appdata 不變。
+部署時請將五個檔案放在網站根目錄。
