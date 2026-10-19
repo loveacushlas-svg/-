@@ -1,3 +1,5 @@
-Personal Secretary V51
+Personal Secretary V52
 
-修正手機拖曳排序介面：首頁快速入口保持正常卡片樣式；在設定→記錄選擇及更多功能中進行拖曳排序，並可完成後鎖定。首頁前三項仍依設定排序。
+與另一版本相同的整張卡片拖曳排序介面；僅解鎖時顯示排序標示，首頁快速入口維持正常版面。
+
+保留原本 IndexedDB 資料庫 daily-life-db / records / appdata，更新不會清除既有資料。
