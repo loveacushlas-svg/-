@@ -10,3 +10,6 @@ Personal Secretary V61 — 手動 Firebase 雲端備份
 注意：Firebase 設定值並非密碼，Firestore Rules 才是資料隔離的關鍵。不要上傳 Service Account 私鑰。Firebase Spark 有免費用量上限，超額時操作可能失敗；請保留 JSON 離線備份。iOS 主畫面 PWA 的彈出式 Google 登入可能受瀏覽器限制，請先於 Safari 測試。
 
 V61：Google Popup 登入防重複點擊、錯誤提示；Firestore 自動長輪詢偵測；備份上傳前不再強制讀取舊索引。為避免失敗時刪除有效資料，本版不自動清除舊版備份分段，長期使用請留意 Firestore 免費儲存配額。
+
+
+V62：改用 Firebase Firestore REST API 上傳與還原，避開 Safari Firestore SDK 離線佇列；每次請求 25 秒逾時並顯示 HTTP 錯誤。仍需 Google 登入及相同 Firestore 規則。首次請先匯出本機 JSON 備份。
