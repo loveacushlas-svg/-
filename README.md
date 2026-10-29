@@ -1,4 +1,4 @@
-Personal Secretary V60 — 手動 Firebase 雲端備份
+Personal Secretary V61 — 手動 Firebase 雲端備份
 
 1. Firebase Console 建立 Spark 免費方案專案（不需付款資訊）。
 2. Authentication → Sign-in method → 啟用 Google。Authentication → Settings → Authorized domains 加入你的 GitHub Pages 網域（例如 loveacushlas-svg.github.io）。
@@ -8,3 +8,5 @@ Personal Secretary V60 — 手動 Firebase 雲端備份
 6. 本機 IndexedDB 與原有 JSON 匯出/匯入仍保留。雲端只在手動點擊備份時上傳；照片會包含在備份 JSON 中，並分段寫入 Firestore。
 
 注意：Firebase 設定值並非密碼，Firestore Rules 才是資料隔離的關鍵。不要上傳 Service Account 私鑰。Firebase Spark 有免費用量上限，超額時操作可能失敗；請保留 JSON 離線備份。iOS 主畫面 PWA 的彈出式 Google 登入可能受瀏覽器限制，請先於 Safari 測試。
+
+V61：Google Popup 登入防重複點擊、錯誤提示；Firestore 自動長輪詢偵測；備份上傳前不再強制讀取舊索引。為避免失敗時刪除有效資料，本版不自動清除舊版備份分段，長期使用請留意 Firestore 免費儲存配額。
