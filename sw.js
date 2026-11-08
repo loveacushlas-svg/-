@@ -1,4 +1,4 @@
-const CACHE='personal-secretary-v63';
+const CACHE='personal-secretary-v63-1';
 const FILES=['./','./index.html','./manifest.webmanifest','./icon.svg'];
 self.addEventListener('install',event=>{event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(FILES)));self.skipWaiting();});
 self.addEventListener('activate',event=>event.waitUntil(Promise.all([caches.keys().then(keys=>Promise.all(keys.filter(key=>key.startsWith('personal-secretary-')&&key!==CACHE).map(key=>caches.delete(key)))),self.clients.claim()])));
