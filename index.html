@@ -7,7 +7,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="Personal Secretary">
-  <meta name="app-version" content="63.4">
+  <meta name="app-version" content="63.5">
   <meta name="description" content="個人生活管理：待辦、習慣、訂閱、日誌、旅遊、汽車保養、寵物支出與月報表。">
   <link rel="manifest" href="./manifest.webmanifest">
   <link rel="apple-touch-icon" href="./icon.svg">
@@ -796,7 +796,7 @@
   function subscriptionDetail(){const sub=data.subscriptions.find(x=>x.id===selectedSubscriptionId);if(!sub)return `<div class="section-head"><h2>訂閱詳情</h2></div><div class="card">${empty('找不到這項訂閱，可能已刪除。')}</div>`;const b=billingDates(sub);const cycle=({day:'每日',week:'每週',month:'每月',quarter:'每季',year:'每年'})[sub.billingCycle]||'每月';return `<div class="card subscription-detail-head"><div class="subscription-symbol">${escapeHTML((sub.name||'訂').trim().slice(0,1))}</div><h2>${escapeHTML(sub.name)}</h2><div class="subscription-detail-price">${subMoney(sub.price,sub.currency)}</div><span class="pill">${b.ended?'已結束':'訂閱中'} · ${cycle}</span></div><section class="card"><h3>扣款週期時間軸</h3>${billingFlow(sub)}<div class="footnote">依訂閱起始日與週期推算，實際扣款時間以服務商帳單為準。</div></section><section class="card"><h3>訂閱詳情</h3><div class="subscription-info"><span>扣款週期</span><strong>${cycle}</strong><span>訂閱起始日</span><strong>${escapeHTML(sub.startDate||'未設定')}</strong><span>本期訂閱終止日（自動計算）</span><strong>${escapeHTML(b.autoEnd)}</strong><span>實際取消／停訂日期</span><strong>${escapeHTML(sub.endDate||'未設定，持續續訂')}</strong><span>本期開始日</span><strong>${escapeHTML(b.periodStart)}</strong><span>本期到期日</span><strong>${escapeHTML(b.periodEnd)}</strong><span>前次扣款日</span><strong>${escapeHTML(b.prev||'尚無')}</strong><span>下次扣款日（本期終止日）</span><strong>${escapeHTML(b.next||'無下次扣款')}</strong><span>扣款提醒</span><strong>${sub.reminderEnabled?'開啟（前景提醒）':'未開啟'}</strong></div>${sub.note?`<div class="subscription-note"><strong>備註</strong><p>${escapeHTML(sub.note)}</p></div>`:''}</section><div class="row" style="justify-content:flex-end;gap:10px"><button class="btn" data-action="edit-sub" data-id="${escapeHTML(sub.id)}">編輯</button><button class="btn danger" data-action="delete-sub" data-id="${escapeHTML(sub.id)}">刪除</button></div><p class="footnote">扣款日期依起始日及扣款週期推算；實際請依服務商帳單為準。</p>`;}
 
   function editSubscription(item=null){const fullField=(...args)=>field(...args).replace('<div class="field ', '<div class="field full ');const opts=(name,options,value)=>`<div class="field"><label>${name==='currency'?'幣別':'扣款週期'}</label><select name="${name}">${options.map(([v,t])=>`<option value="${v}" ${v===value?'selected':''}>${t}</option>`).join('')}</select></div>`;modalForm(item?'編輯訂閱':'新增訂閱',field('服務名稱','name','例如：影音平台','text',item?.name||'')+field('價格','price','','number',item?String(item.price??''):'')+opts('currency',[['TWD','台幣 TWD'],['USD','美金 USD'],['JPY','日幣 JPY']],item?.currency||'TWD')+opts('billingCycle',[['day','日'],['week','週'],['month','月'],['quarter','季'],['year','年']],item?.billingCycle||'year')+fullField('訂閱起始日期','startDate','','date',item?.startDate||today()) +`<div class="field full"><label>本期訂閱終止日期（依週期自動計算）</label><input id="subAutoEnd" type="date" readonly><div class="subtle">本期終止日期即顯示的下次扣款日期；如會自動續訂，日期會依當前週期更新。</div></div>`+fullField('實際取消／停訂日期（選填）','endDate','','date',item?.endDate||'')+`<div class="field full subtle">未填終止日期表示持續續訂；每期到期日與本期終止日由起始日及扣款週期自動計算。</div>`+`<div class="field full"><label class="checkline"><input type="checkbox" name="reminderEnabled" ${item?.reminderEnabled?'checked':''}><span class="checkline-text">下次扣款提醒（App 開啟時檢查）</span></label></div>`+field('備註','note','選填','textarea',item?.note||''),async fd=>{const name=String(fd.get('name')||'').trim(),startDate=fd.get('startDate')||today(),endDate=fd.get('endDate')||'';if(endDate&&endDate<startDate){alert('取消日期不得早於開始日期');throw new Error('日期錯誤');}const vals={name,price:Math.max(0,Number(fd.get('price'))||0),currency:fd.get('currency')||'TWD',billingCycle:fd.get('billingCycle')||'year',startDate,endDate,reminderEnabled:fd.get('reminderEnabled')==='on',note:fd.get('note')||''};if(item)Object.assign(item,vals);else data.subscriptions.push({id:uid(),...vals});});$('#modalForm').classList.add('subscription-form');$('#modalForm textarea[name=note]').rows=2;}
-  function more(){return serviceTiles(`<div class="section-head"><h2>更多功能</h2></div>${orderControls()}<div class="grid sortable-grid ${!orderLocked?'gf-order-mode':''}" data-sort-grid="services"><button class="tile" data-tab="tasks"><span class="emoji">✓</span><strong>待辦事項</strong><small>規劃待辦</small></button><button class="tile" data-tab="journal"><span class="emoji">▤</span><strong>生活紀錄</strong><small>撰寫、查閱、編輯與刪除日誌</small></button><button class="tile" data-tab="trips"><span class="emoji">⌁</span><strong>行前準備</strong><small>露營、登山、旅行</small></button><button class="tile" data-tab="habits"><span class="emoji">◷</span><strong>習慣追蹤</strong><small>管理目標進度</small></button><button class="tile" data-tab="subscriptions"><span class="emoji">◇</span><strong>訂閱管理</strong><small>費用與扣款日期</small></button><button class="tile" data-tab="car"><span class="emoji">↗</span><strong>汽車管理</strong><small>保養、里程與支出</small></button><button class="tile" data-tab="reports"><span class="emoji">▥</span><strong>月報表</strong><small>每月紀錄摘要</small></button><button class="tile" data-tab="foods"><span class="emoji">🍽</span><strong>寵物支出</strong><small>貓砂、飼料、醫護與用品</small></button></div><div class="section-head"><h2>管理</h2></div><div class="grid"><button type="button" class="tile" data-tab="backupManagement"><span class="emoji">💾</span><strong>備份管理</strong><small>資料匯入匯出、Google 雲端備份</small></button><button type="button" class="tile" data-tab="notifications"><span class="emoji">🔔</span><strong>通知</strong><small>提醒與通知權限</small></button></div><div class="card"><h3>關於 Personal Secretary</h3><div class="subtle">第 63.4 版（日誌與頁面精簡更新） · 本機儲存，可選用 Firebase 免費雲端備份與還原，無廣告。</div></div>`);}
+  function more(){return serviceTiles(`<div class="section-head"><h2>更多功能</h2></div>${orderControls()}<div class="grid sortable-grid ${!orderLocked?'gf-order-mode':''}" data-sort-grid="services"><button class="tile" data-tab="tasks"><span class="emoji">✓</span><strong>待辦事項</strong><small>規劃待辦</small></button><button class="tile" data-tab="journal"><span class="emoji">▤</span><strong>生活紀錄</strong><small>撰寫、查閱、編輯與刪除日誌</small></button><button class="tile" data-tab="trips"><span class="emoji">⌁</span><strong>行前準備</strong><small>露營、登山、旅行</small></button><button class="tile" data-tab="habits"><span class="emoji">◷</span><strong>習慣追蹤</strong><small>管理目標進度</small></button><button class="tile" data-tab="subscriptions"><span class="emoji">◇</span><strong>訂閱管理</strong><small>費用與扣款日期</small></button><button class="tile" data-tab="car"><span class="emoji">↗</span><strong>汽車管理</strong><small>保養、里程與支出</small></button><button class="tile" data-tab="reports"><span class="emoji">▥</span><strong>月報表</strong><small>每月紀錄摘要</small></button><button class="tile" data-tab="foods"><span class="emoji">🍽</span><strong>寵物支出</strong><small>貓砂、飼料、醫護與用品</small></button></div><div class="section-head"><h2>管理</h2></div><div class="grid"><button type="button" class="tile" data-tab="backupManagement"><span class="emoji">💾</span><strong>備份管理</strong><small>資料匯入匯出、Google 雲端備份</small></button><button type="button" class="tile" data-tab="notifications"><span class="emoji">🔔</span><strong>通知</strong><small>提醒與通知權限</small></button></div><div class="card"><h3>關於 Personal Secretary</h3><div class="subtle">第 63.5 版（iPhone PWA Google 登入修正） · 本機儲存，可選用 Firebase 免費雲端備份與還原，無廣告。</div></div>`);}
   function setupSortableTiles(){
     if(currentTab!=='more')return;
     const grid=document.querySelector('#view .sortable-grid');if(!grid)return;
@@ -917,33 +917,78 @@
   const firebaseConfigKey='ps-firebase-config';
   let firebaseConfigText=(()=>{try{return localStorage.getItem(firebaseConfigKey)||'';}catch(e){return '';}})();
   let firebaseAuth=null,firebaseStore=null,firebaseBusy=false,firebaseLoginBusy=false,firebaseStatus='尚未連線',firebaseUser=null;
-  function backupPayload(){return {app:'Personal Secretary',version:63.4,exportedAt:new Date().toISOString(),data,serviceVisibility,customIcons,serviceOrder,settingsOrder,orderLocked};}
-  function firebaseCloudPanel(){return `<section class="card google-cloud-panel"><h3>Google 帳號 · 免費雲端備份</h3><p class="subtle">使用 Firebase Spark 免費方案。平常資料仍儲存在本機，只有按「備份到雲端」才上傳。換手機時使用相同 Google 帳號登入並按「從雲端還原」。需要網路連線。</p><div class="field"><label for="firebaseConfig">Firebase 網頁設定（首次設定；貼上 Firebase config JSON）</label><textarea id="firebaseConfig" rows="5" spellcheck="false" placeholder='{"apiKey":"...","authDomain":"...","projectId":"...","appId":"..."}'>${escapeHTML(firebaseConfigText)}</textarea></div><p class="subtle">在 Firebase 建立 Spark 免費專案、啟用 Authentication 的 Google 登入及 Cloud Firestore，並設定 Firestore 安全規則。設定值不是密碼，勿貼入私密金鑰。首次設定需在 Firebase 控制台完成，無須提供付款資訊。</p><div class="row"><button class="btn" data-action="firebase-connect" type="button">使用 Google 登入</button><button class="btn" data-action="firebase-disconnect" type="button">登出</button></div><div class="row"><button class="btn primary" data-action="firebase-backup" type="button">備份到雲端</button><button class="btn" data-action="firebase-restore" type="button">從雲端還原</button></div><div class="cloud-status" role="status">${escapeHTML(firebaseStatus)}${firebaseUser?' · '+escapeHTML(firebaseUser.email||'已登入'):''}</div><p class="subtle">每次備份會取代上一份雲端備份。還原前會顯示備份時間及覆蓋確認。圖片較多時備份時間可能較長；請等待完成提示。若在 iPhone 主畫面 PWA 無法彈出登入視窗，請先用 Safari 開啟相同網址登入。</p></section>`;}
+  function backupPayload(){return {app:'Personal Secretary',version:63.5,exportedAt:new Date().toISOString(),data,serviceVisibility,customIcons,serviceOrder,settingsOrder,orderLocked};}
+  function firebaseCloudPanel(){return `<section class="card google-cloud-panel"><h3>Google 帳號 · 免費雲端備份</h3><p class="subtle">使用 Firebase Spark 免費方案。平常資料仍儲存在本機，只有按「備份到雲端」才上傳。換手機時使用相同 Google 帳號登入並按「從雲端還原」。需要網路連線。</p><div class="field"><label for="firebaseConfig">Firebase 網頁設定（首次設定；貼上 Firebase config JSON）</label><textarea id="firebaseConfig" rows="5" spellcheck="false" placeholder='{"apiKey":"...","authDomain":"...","projectId":"...","appId":"..."}'>${escapeHTML(firebaseConfigText)}</textarea></div><p class="subtle">在 Firebase 建立 Spark 免費專案、啟用 Authentication 的 Google 登入及 Cloud Firestore，並設定 Firestore 安全規則。設定值不是密碼，勿貼入私密金鑰。首次設定需在 Firebase 控制台完成，無須提供付款資訊。</p><div class="row"><button class="btn" data-action="firebase-connect" type="button">使用 Google 登入</button><button class="btn" data-action="firebase-disconnect" type="button">登出</button></div><div class="row"><button class="btn primary" data-action="firebase-backup" type="button">備份到雲端</button><button class="btn" data-action="firebase-restore" type="button">從雲端還原</button></div><div class="cloud-status" role="status">${escapeHTML(firebaseStatus)}${firebaseUser?' · '+escapeHTML(firebaseUser.email||'已登入'):''}</div><p class="subtle">每次備份會取代上一份雲端備份。還原前會顯示備份時間及覆蓋確認。圖片較多時備份時間可能較長；請等待完成提示。iPhone 主畫面 APP 第一次可能需先準備登入元件，再按一次登入；若授權後仍未登入，請查看顯示的錯誤代碼。Safari 與桌面 APP 的登入狀態可能互不共用。</p></section>`;}
   function firebaseMessage(message){firebaseStatus=message;const status=$('#view .cloud-status');if(status)status.textContent=message+(firebaseUser?' · '+(firebaseUser.email||'已登入'):'');}
   function saveFirebaseConfig(){const input=$('#firebaseConfig');if(input){firebaseConfigText=input.value.trim();try{localStorage.setItem(firebaseConfigKey,firebaseConfigText);}catch(e){}}}
   function parseFirebaseConfig(){saveFirebaseConfig();let config;try{config=JSON.parse(firebaseConfigText);}catch(e){throw Error('請貼上有效的 Firebase 設定 JSON');}for(const key of ['apiKey','authDomain','projectId','appId'])if(!config?.[key]||typeof config[key]!=='string')throw Error('Firebase 設定缺少 '+key);return config;}
   function loadFirebaseScript(url){return new Promise((resolve,reject)=>{const s=document.createElement('script');s.src=url;s.onload=resolve;s.onerror=()=>reject(Error('無法載入 Firebase 元件，請檢查網路'));document.head.appendChild(s);});}
-  async function firebaseInit(){if(firebaseAuth&&firebaseStore)return;const config=parseFirebaseConfig();if(location.protocol!=='https:'&&location.hostname!=='localhost')throw Error('Google 登入需使用 HTTPS 網站，例如 GitHub Pages');if(!window.firebase?.apps){await loadFirebaseScript('https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js');await loadFirebaseScript('https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js');await loadFirebaseScript('https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js');}else{if(!firebase.auth)await loadFirebaseScript('https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js');if(!firebase.firestore)await loadFirebaseScript('https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js');}const app=firebase.apps.find(a=>a.name==='personal-secretary-v60')||firebase.initializeApp(config,'personal-secretary-v60');firebaseAuth=app.auth();firebaseStore=app.firestore();firebaseStore.settings({experimentalAutoDetectLongPolling:true,useFetchStreams:false});firebaseAuth.onAuthStateChanged(u=>{firebaseUser=u;firebaseMessage(u?'已連結 Google，可手動備份或還原':'尚未登入');});}
+  let firebaseInitPromise=null,firebaseAuthReady=false,firebaseAuthObserverReady=false;
+  function firebaseStandalone(){return window.matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;}
+  function firebaseErrorText(e){
+    const code=e?.code||'unknown';
+    const tips={
+      'auth/cancelled-popup-request':'登入請求重疊，請稍後重試。',
+      'auth/popup-blocked':'登入視窗遭阻擋，請檢查 Safari 彈出視窗設定。',
+      'auth/popup-closed-by-user':'Google 授權視窗已關閉，但 Firebase 沒有完成登入。',
+      'auth/unauthorized-domain':'請在 Firebase Authentication 授權網域加入 '+location.hostname+'。',
+      'auth/operation-not-supported-in-this-environment':'此 iPhone 主畫面環境不支援目前的彈出式登入。',
+      'auth/web-storage-unsupported':'此環境無法儲存 Firebase 登入狀態。'
+    };
+    return (tips[code]||e?.message||String(e))+'（'+code+'；'+(firebaseStandalone()?'iPhone 主畫面模式':'瀏覽器模式')+'）';
+  }
+  async function firebaseInit(){
+    if(firebaseInitPromise)return firebaseInitPromise;
+    firebaseInitPromise=(async()=>{
+      const config=parseFirebaseConfig();
+      if(location.protocol!=='https:'&&location.hostname!=='localhost')throw Error('Google 登入需使用 HTTPS 網站，例如 GitHub Pages');
+      if(!window.firebase?.apps){await loadFirebaseScript('https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js');await loadFirebaseScript('https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js');await loadFirebaseScript('https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js');}
+      else{if(!firebase.auth)await loadFirebaseScript('https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js');if(!firebase.firestore)await loadFirebaseScript('https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js');}
+      const app=firebase.apps.find(a=>a.name==='personal-secretary-v60')||firebase.initializeApp(config,'personal-secretary-v60');
+      firebaseAuth=app.auth();firebaseStore=app.firestore();
+      firebaseStore.settings({experimentalAutoDetectLongPolling:true,useFetchStreams:false});
+      await firebaseAuth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+      await new Promise((resolve,reject)=>{
+        const unsub=firebaseAuth.onAuthStateChanged(u=>{firebaseUser=u;firebaseAuthObserverReady=true;firebaseMessage(u?'已連結 Google，可手動備份或還原':'尚未登入');resolve();unsub();},reject);
+      });
+      firebaseAuth.onAuthStateChanged(u=>{
+        firebaseUser=u;
+        if(!firebaseLoginBusy)firebaseMessage(u?'已連結 Google，可手動備份或還原':'尚未登入');
+      });
+      firebaseAuthReady=true;
+    })();
+    try{return await firebaseInitPromise;}catch(e){firebaseInitPromise=null;firebaseAuthReady=false;throw e;}
+  }
+  // iOS standalone WebKit may block a popup if asynchronous SDK loading precedes it.
+  // All SDK setup is completed in advance; popup is invoked synchronously on the next tap.
   async function firebaseConnect(){
     if(firebaseLoginBusy)return;
+    if(!firebaseAuthReady){
+      firebaseMessage('正在準備 Google 登入元件…');
+      try{await firebaseInit();firebaseMessage(firebaseAuth.currentUser?'已連結 Google':'登入元件已準備完成，請再按一次「使用 Google 登入」');}
+      catch(e){throw Error('登入元件初始化失敗：'+firebaseErrorText(e));}
+      return;
+    }
+    if(firebaseAuth.currentUser){firebaseUser=firebaseAuth.currentUser;firebaseMessage('Google 帳號已登入');return;}
     firebaseLoginBusy=true;
     const button=document.querySelector('[data-action="firebase-connect"]');
     if(button)button.disabled=true;
+    firebaseMessage('正在等待 Google 授權結果…');
+    const provider=new firebase.auth.GoogleAuthProvider();
+    provider.setCustomParameters({prompt:'select_account'});
     try{
-      await firebaseInit();
-      if(firebaseAuth.currentUser){firebaseUser=firebaseAuth.currentUser;firebaseMessage('Google 帳號已登入');render();return;}
-      firebaseMessage('正在開啟 Google 登入視窗，請勿重複點擊…');
-      const provider=new firebase.auth.GoogleAuthProvider();
-      provider.setCustomParameters({prompt:'select_account'});
-      const result=await firebaseAuth.signInWithPopup(provider);
-      firebaseUser=result.user;
-      firebaseMessage('已登入 Google');render();
+      // IMPORTANT: no await before signInWithPopup; preserve the user gesture on iOS.
+      const popupPromise=firebaseAuth.signInWithPopup(provider);
+      const result=await popupPromise;
+      if(!result?.user)throw Error('Google 視窗已結束，但沒有回傳 Firebase 使用者');
+      await result.user.getIdToken();
+      if(!firebaseAuth.currentUser)throw Error('Google 已授權，但 Firebase 尚未建立有效登入工作階段');
+      firebaseUser=firebaseAuth.currentUser;
+      firebaseMessage('Firebase 登入成功，可手動備份或還原');
+      render();
     }catch(e){
-      if(e.code==='auth/cancelled-popup-request')throw Error('登入請求重疊，請關閉其他 Google 登入視窗後再試一次');
-      if(e.code==='auth/popup-blocked')throw Error('Safari 阻擋登入視窗，請允許彈出式視窗後重試');
-      if(e.code==='auth/unauthorized-domain')throw Error('請至 Firebase Authentication 的授權網域加入目前 APP 網域：'+location.hostname);
-      if(e.code==='auth/popup-closed-by-user')throw Error('登入視窗已關閉，尚未完成登入');
-      throw e;
+      firebaseUser=firebaseAuth.currentUser||null;
+      throw Error('Google 授權結果未完成：'+firebaseErrorText(e)+'。若新桌面 APP 持續失敗，請保留原本可用的桌面 APP；Safari 的登入狀態不一定能共用。');
     }finally{firebaseLoginBusy=false;const btn=document.querySelector('[data-action="firebase-connect"]');if(btn)btn.disabled=false;}
   }
   async function firebaseDisconnect(){if(firebaseAuth)await firebaseAuth.signOut();firebaseUser=null;firebaseMessage('已登出 Google（本機及雲端資料不受影響）');render();}
@@ -1009,7 +1054,7 @@
       }
       firebaseMessage('正在確認備份索引…');
       await firestoreRequest(user,root+'/backups/current','PATCH',{
-        batch,count,hash,byteLength:bytes.length,backupAt:new Date().toISOString(),exportedAt:new Date().toISOString(),version:63.4
+        batch,count,hash,byteLength:bytes.length,backupAt:new Date().toISOString(),exportedAt:new Date().toISOString(),version:63.5
       });
       firebaseMessage('備份完成：'+new Date().toLocaleString('zh-TW'));
       alert('已成功備份到 Firebase 雲端。');
@@ -1140,7 +1185,7 @@
   }
   async function checkCarReminders(){for(const c of data.car){if(!c.reminderEnabled||!c.nextDate||c.nextDate>today()||carReminded.has(c.id+'|'+today()))continue;carReminded.add(c.id+'|'+today());const msg=`${c.title}：預定保養日期 ${c.nextDate} 已到。`;if('Notification'in window&&Notification.permission==='granted'){try{new Notification('Personal Secretary',{body:msg});}catch(e){alert(msg);}}else alert(msg);}}
   function checkSubscriptionReminders(){for(const sub of data.subscriptions||[]){if(!sub.reminderEnabled)continue;const b=billingDates(sub),key=sub.id+'|'+today();if(!b.next||b.next>dateKey(new Date(Date.now()+86400000))||subReminded.has(key))continue;subReminded.add(key);const msg=`${sub.name}：訂閱本期終止／扣款日 ${b.next}，金額 ${subMoney(sub.price,sub.currency)}。`;if('Notification'in window&&Notification.permission==='granted'){try{new Notification('Personal Secretary',{body:msg});}catch(e){alert(msg);}}else alert(msg);}}
-  async function init(){try{db=await openDB();const stored=await readAll();if(stored){data=Object.assign({todos:[],habits:[],habitLogs:[],journals:[],trips:[],car:[],subscriptions:[],foods:[],petExpenses:[],tripPlans:[],tripProjects:[]},stored);if(!Array.isArray(data.petExpenses))data.petExpenses=[];if(!Array.isArray(data.foodNoteTags))data.foodNoteTags=["蔬菜","水果","油炸","水煮","肉類","乳製品"];for(const h of data.habits){if(!h.taskDays)h.taskDays='daily';if(h.targetMinutes===undefined){const match=String(h.name||'').match(/(\d+)\s*分鐘/);h.targetMinutes=match?Number(match[1]):0;}if(h.reminderEnabled===undefined)h.reminderEnabled=false;if(h.reminderTime===undefined)h.reminderTime='09:00';}}else{setDefaults();await save();}}catch(err){setDefaults();alert('本機資料庫無法開啟。請使用最新版 Safari 或 Chrome，並避免使用無痕模式。');}render();setInterval(refreshDisplayedDate,60000);setInterval(checkTodoReminders,15000);checkTodoReminders();setInterval(checkHabitReminders,15000);setInterval(checkCarReminders,60000);setInterval(checkPetReminders,60000);setInterval(checkSubscriptionReminders,60000);checkCarReminders();checkPetReminders();checkSubscriptionReminders();const overdue=data.todos.filter(t=>todoOverdue(t));if(overdue.length)setTimeout(()=>{if(currentTab==='home')alert(`提醒：你有 ${overdue.length} 項逾期待辦。`);},700);if('serviceWorker'in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(()=>{});}
+  async function init(){try{db=await openDB();const stored=await readAll();if(stored){data=Object.assign({todos:[],habits:[],habitLogs:[],journals:[],trips:[],car:[],subscriptions:[],foods:[],petExpenses:[],tripPlans:[],tripProjects:[]},stored);if(!Array.isArray(data.petExpenses))data.petExpenses=[];if(!Array.isArray(data.foodNoteTags))data.foodNoteTags=["蔬菜","水果","油炸","水煮","肉類","乳製品"];for(const h of data.habits){if(!h.taskDays)h.taskDays='daily';if(h.targetMinutes===undefined){const match=String(h.name||'').match(/(\d+)\s*分鐘/);h.targetMinutes=match?Number(match[1]):0;}if(h.reminderEnabled===undefined)h.reminderEnabled=false;if(h.reminderTime===undefined)h.reminderTime='09:00';}}else{setDefaults();await save();}}catch(err){setDefaults();alert('本機資料庫無法開啟。請使用最新版 Safari 或 Chrome，並避免使用無痕模式。');}render();if(firebaseConfigText){firebaseInit().catch(e=>{firebaseMessage('登入元件準備失敗：'+firebaseErrorText(e));});}setInterval(refreshDisplayedDate,60000);setInterval(checkTodoReminders,15000);checkTodoReminders();setInterval(checkHabitReminders,15000);setInterval(checkCarReminders,60000);setInterval(checkPetReminders,60000);setInterval(checkSubscriptionReminders,60000);checkCarReminders();checkPetReminders();checkSubscriptionReminders();const overdue=data.todos.filter(t=>todoOverdue(t));if(overdue.length)setTimeout(()=>{if(currentTab==='home')alert(`提醒：你有 ${overdue.length} 項逾期待辦。`);},700);if('serviceWorker'in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(()=>{});}
   init();
 })();
 </script>
